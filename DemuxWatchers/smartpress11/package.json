@@ -1,0 +1,19 @@
+{
+  "name": "SmartPress",
+  "version": "0.0.1",
+  "author": {
+    "name": "Lachlan Greenbank working off template from Julien Heller",
+    "url": "https://smart.press/"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.395.0",
+    "demux": "^1.0.3",
+    "demux-eos": "1.0.1",
+    "firebase": "^5.5.9",
+    "firebase-admin": "^6.2.0"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
