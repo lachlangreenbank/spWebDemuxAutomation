@@ -7,7 +7,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.395.0",
+    "aws-sdk": "^2.409.0",
     "demux": "^1.0.3",
     "demux-eos": "1.0.1",
     "firebase": "^5.5.9",

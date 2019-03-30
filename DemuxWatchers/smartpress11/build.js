@@ -73,11 +73,18 @@ const createEffectsJsFile = function (params) {
   return new Promise(function (resolve, reject) {
 
     let effectsJs = "var AWS = require('aws-sdk');" + BREAK +
+      "const entryTableCredentials = require('../../secrets/EntrysTableCred')" + BREAK + BREAK +
+
       "AWS.config.update({" + BREAK +
-        "region: 'eu-west-2'," + BREAK +
-        "endpoint: 'http://localhost:8000'" + BREAK +
+      TAB + "region: 'us-east-2'," + BREAK +
+      TAB + "endpoint: 'dynamodb.us-east-2.amazonaws.com'," + BREAK +
+      TAB + "accessKeyId: entryTableCredentials.accessKey," + BREAK +
+      TAB + "secretAccessKey: entryTableCredentials.secretKey" + BREAK +
       "});" + BREAK +
+
+
       "var docClient = new AWS.DynamoDB.DocumentClient()" + BREAK +
+      "var account = '" + ACCOUNT + "';" + BREAK +
       "var table = 'Entrys';" + BREAK +
       "var dynamodb = new AWS.DynamoDB();" + BREAK + BREAK +
 
@@ -87,18 +94,20 @@ const createEffectsJsFile = function (params) {
       TAB + "console.info('State updated:', JSON.stringify(state, null, 2))" + BREAK +
        
       "var params = {" + BREAK +
-        "TableName: table," + BREAK +
-        "Item: {" + BREAK +
-            "'eid': state.indexState.blockHash," + BREAK +
-            "'account_name': 'lachlan'" + BREAK +
-        "}" + BREAK +
+      TAB + "TableName: table," + BREAK +
+      TAB + "Item: {" + BREAK +
+      TAB + TAB + "...state.entry," + BREAK +
+      TAB + TAB + "'event_id': state.indexState.blockHash," + BREAK +
+      TAB + TAB + "'contract_id': account," + BREAK +
+            
+      TAB + "}" + BREAK +
       "};" + BREAK +
       "docClient.put(params, function(err, data) {" + BREAK +
-        "if (err) {" + BREAK +
-           "console.error('Unable to add contract', table, '. Error JSON:', JSON.stringify(err, null, 2));" + BREAK +
-        "} else {" + BREAK +
-           "console.log('PutItem succeeded:', table);" + BREAK +
-        "}" + BREAK +
+      TAB + "if (err) {" + BREAK +
+      TAB + TAB + "console.error('Unable to add contract', table, '. Error JSON:', JSON.stringify(err, null, 2));" + BREAK +
+      TAB + "} else {" + BREAK +
+      TAB + TAB + "console.log('PutItem succeeded:', table);" + BREAK +
+      TAB + "}" + BREAK +
       "});" +
 
 

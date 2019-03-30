@@ -1,9 +1,14 @@
 var AWS = require('aws-sdk');
+const entryTableCredentials = require('../../secrets/EntrysTableCred')
+
 AWS.config.update({
-region: 'eu-west-2',
-endpoint: 'http://localhost:8000'
+	region: 'us-east-2',
+	endpoint: 'dynamodb.us-east-2.amazonaws.com',
+	accessKeyId: entryTableCredentials.accessKey,
+	secretAccessKey: entryTableCredentials.secretKey
 });
 var docClient = new AWS.DynamoDB.DocumentClient()
+var account = 'smartpress11';
 var table = 'Entrys';
 var dynamodb = new AWS.DynamoDB();
 
@@ -13,18 +18,19 @@ function logUpdate(state, payload, blockInfo, context) {
 
 	console.info('State updated:', JSON.stringify(state, null, 2))
 var params = {
-TableName: table,
-Item: {
-'eid': state.indexState.blockHash,
-'account_name': 'lachlan'
-}
+	TableName: table,
+	Item: {
+		...state.entry,
+		'event_id': state.indexState.blockHash,
+		'contract_id': account,
+	}
 };
 docClient.put(params, function(err, data) {
-if (err) {
-console.error('Unable to add contract', table, '. Error JSON:', JSON.stringify(err, null, 2));
-} else {
-console.log('PutItem succeeded:', table);
-}
+	if (err) {
+		console.error('Unable to add contract', table, '. Error JSON:', JSON.stringify(err, null, 2));
+	} else {
+		console.log('PutItem succeeded:', table);
+	}
 });}
 
 const effects = [
